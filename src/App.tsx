@@ -1,16 +1,30 @@
 import React from 'react';
-import { Plate, TEditableProps } from '@udecode/plate';
+import { Plate } from '@udecode/plate';
+import { editableProps } from './common/editableProps';
+import { MyParagraphElement, MyValue } from './typescript/plateTypes';
 import './App.css';
 
-const editableProps: TEditableProps = {
-  placeholder: 'Type...',
-};
+const initialValue = [
+  {
+    type: 'p',
+    children: [
+      {
+        text:
+            'This is editable plain text with react and history plugins, just like a <textarea>!',
+      },
+    ],
+  } as MyParagraphElement,
+];
 
 function App() {
   return (
     <div className="App">
       <header className="App-header">
-        <Plate id="test-id-late-js" editableProps={editableProps} />
+        <Plate<MyValue>
+          id="unique-id"
+          editableProps={editableProps}
+          initialValue={initialValue}
+        />
       </header>
     </div>
   );
