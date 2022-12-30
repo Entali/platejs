@@ -74,7 +74,7 @@ import {
   usePlateStates,
   WithOverride,
 } from '@udecode/plate';
-import { CSSProperties } from 'react'; // TODO: check
+import { CSSProperties } from 'react';
 
 /**
  * Text

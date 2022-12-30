@@ -1,29 +1,66 @@
-import React, {useState} from 'react';
-import { Plate } from '@udecode/plate';
+import React, {useRef, useState} from 'react';
+import { DndProvider } from 'react-dnd';
+import { HTML5Backend } from 'react-dnd-html5-backend';
+import {
+  createBlockquotePlugin,
+  createBoldPlugin,
+  createCodeBlockPlugin,
+  createCodePlugin,
+  createHeadingPlugin,
+  createItalicPlugin,
+  createParagraphPlugin,
+  createStrikethroughPlugin,
+  createUnderlinePlugin,
+  Plate,
+  PlateProvider,
+  HeadingToolbar,
+} from '@udecode/plate';
 import { editableProps } from './common/editableProps';
-import { MyParagraphElement, MyValue } from './typescript/plateTypes';
+import { MyValue, MyPlatePlugin } from './typescript/plateTypes';
 import './App.css';
+import { ToolbarButtons } from "./components/ToolbarButtons";
 
-const initialValue = [
-  {
-    type: 'p',
-    children: [{ text: 'My name is Nata' }],
-  } as MyParagraphElement,
+const plugins: MyPlatePlugin[] = [
+  createParagraphPlugin(),
+  createBlockquotePlugin(),
+  createCodeBlockPlugin(),
+  createHeadingPlugin(),
+
+  createBoldPlugin(),
+  createItalicPlugin(),
+  createUnderlinePlugin(),
+  createStrikethroughPlugin(),
+  createCodePlugin(),
 ];
+
+const styles: Record<string, React.CSSProperties> = {
+  container: { position: 'relative' },
+};
 
 function App() {
   const [value, setValue] = useState<MyValue | null>(null);
   console.log('value', value);
+  const containerRef = useRef(null);
 
   return (
     <div className="App">
       <header className="App-header">
-        <Plate<MyValue>
-          id="unique-id"
-          editableProps={editableProps}
-          initialValue={initialValue}
-          onChange={(newValue) => setValue(newValue)}
-        />
+        <DndProvider backend={HTML5Backend}>
+          <PlateProvider<MyValue> plugins={plugins}>
+            <HeadingToolbar>
+              <ToolbarButtons />
+            </HeadingToolbar>
+
+            <div ref={containerRef} style={styles.container}>
+              <Plate
+                id="plate-id"
+                onChange={(v) => setValue(v)}
+                editableProps={editableProps}>
+                <p>text</p>
+              </Plate>
+            </div>
+          </PlateProvider>
+        </DndProvider>
       </header>
     </div>
   );
